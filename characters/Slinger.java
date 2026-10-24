@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 // Simple character class
-class Slinger extends GameCharacter {
+abstract class Slinger extends GameCharacter {
     private int level;
     private int experience;
     private int experienceToNextLevel;
@@ -55,6 +55,8 @@ class Slinger extends GameCharacter {
         System.out.println(getName() + " reached level " + level
                 + "!");
     }
+
+    public abstract String getCombatRole();
 
     @Override
     public String getStatus() {

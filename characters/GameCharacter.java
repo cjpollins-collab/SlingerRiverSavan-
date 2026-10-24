@@ -1,5 +1,5 @@
 // Simple character class
-public class GameCharacter {
+public abstract class GameCharacter {
     String name;
     int hp;
     int maxhp;

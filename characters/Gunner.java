@@ -8,7 +8,7 @@ public class Gunner extends Slinger {
         ammo = mag;
     }
         public int shootingGun(GameCharacter target) {
-            if (enemy == null || !isAlive() || !target.isAlive()) {
+            if (super.name == null || !isAlive() || !target.isAlive()) {
                 return 0;
             }
 
@@ -37,7 +37,7 @@ public class Gunner extends Slinger {
 
         @Override
         public String getCombatRole() {
-            return "Mage: powerful magical damage";
+            return "Gunner: shoot out a good amount of damage";
         }
 //
         @Override
