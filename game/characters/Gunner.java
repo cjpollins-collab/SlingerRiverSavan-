@@ -1,16 +1,25 @@
+package characters;
+
 public class Gunner extends Slinger {
     private int ammo;
     private int mag;/*not clips*/
-    public Gunner(String name, int hp, int maxhp, int attack, int defense) {
-        super(name, 150, 150, 150, 75);
+    public Gunner(String name) {
+        super(name, 150, 150, 10, 30);
 
         mag = 12;
         ammo = mag;
     }
+        @Override
         public int shootingGun(GameCharacter target) {
-            if (super.name == null || !isAlive() || !target.isAlive()) {
+            if (target == null || !isAlive() || !target.isAlive()) {
                 return 0;
             }
+
+            if (doesShotMiss()) {
+                System.out.println(getName() + " missed the shot!");
+                return 0;
+            }
+
 
             if (ammo <= 0) {
                 System.out.println("Not enough ammo!");
@@ -18,10 +27,10 @@ public class Gunner extends Slinger {
             }
 
             ammo -= 1;
-            int damage = getAttack() + 75;
-            int dealt = target.takeDamage(damage);
+            int damage = target.takeDamage(getAttack() + 30);
+            int dealt = damage;
 
-            System.out.println(getName() + " casts Fireball!");
+            System.out.println(getName() + " shoots!");
             return dealt;
         }
 //
@@ -35,6 +44,9 @@ public class Gunner extends Slinger {
             ammo = Math.min(mag, ammo + bullets);
         }
 
+    protected double getMissChance() {
+        return 0.10;
+    }
         @Override
         public String getCombatRole() {
             return "Gunner: shoot out a good amount of damage";
