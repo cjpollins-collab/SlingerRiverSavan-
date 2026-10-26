@@ -3,14 +3,17 @@ package Engine;
 import characters.Enemy;
 import World.Chapter;
 import World.Map;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameEngine {
+
     private final Party party;
     private final Map gameMap;
     private final BattleSystem battleSystem;
     private final List<Chapter> chapters;
+
     private int currentChapterIndex;
 
     public GameEngine() {
@@ -44,12 +47,25 @@ public class GameEngine {
         }
     }
 
+    // Non-interactive version retained for compatibility.
     public boolean startBattle(Enemy enemy) {
-        boolean victory = battleSystem.startBattle(party, enemy);
+        System.out.println(
+                "Start this battle through the console menu."
+        );
+        return false;
+    }
+
+    // Interactive version: asks the player to choose each action.
+    public boolean startBattle(
+            Enemy enemy,
+            CombatActionProvider actions) {
+
+        boolean victory = battleSystem.startBattle(
+                party, enemy, actions
+        );
 
         if (victory) {
-            System.out.println(
-                    "You can now continue your adventure.");
+            System.out.println("Battle completed successfully!");
         }
 
         return victory;
@@ -63,25 +79,25 @@ public class GameEngine {
         Chapter current = getCurrentChapter();
 
         if (current == null) {
-            System.out.println("There is no current chapter.");
             return false;
         }
 
         if (!current.completeChapter()) {
+            System.out.println(
+                    "Complete all chapter quests before proceeding."
+            );
             return false;
         }
 
         if (currentChapterIndex + 1 < chapters.size()) {
             currentChapterIndex++;
+            chapters.get(currentChapterIndex).unlock();
 
-            Chapter next = getCurrentChapter();
-            next.unlock();
-
-            System.out.println("Your next destination is: "
-                    + next.getTitle());
-        } else {
             System.out.println(
-                    "Congratulations! You completed the campaign!");
+                    "The next chapter has been unlocked!"
+            );
+        } else {
+            System.out.println("You completed the campaign!");
         }
 
         return true;
@@ -93,14 +109,12 @@ public class GameEngine {
         Chapter current = getCurrentChapter();
 
         if (current != null) {
-            System.out.println("Current chapter: "
-                    + current.getTitle());
+            current.displayChapter();
         } else {
-            System.out.println("No chapter has been added.");
+            System.out.println("No chapter is currently available.");
         }
 
         party.displayParty();
         gameMap.displayMap();
     }
 }
-

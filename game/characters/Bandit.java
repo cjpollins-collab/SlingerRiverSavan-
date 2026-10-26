@@ -1,9 +1,10 @@
 package characters;
 
 public class Bandit extends Enemy{
+    private static final String DEFAULT_NAME = "Bandit";
     /** Creates a bandit with basic combat statistics. */
     public Bandit() {
-        super(name,500,500,35,15,50,10);
+        super(DEFAULT_NAME,100,100,35,15,50,10);
     }
 
     @Override

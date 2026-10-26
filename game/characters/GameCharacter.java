@@ -56,22 +56,7 @@ public abstract class GameCharacter {
         return damage;
     }
 
-    public int takeIncomingDamage(int incomingDamage) {
-        if (incomingDamage < 0) {
-            throw new IllegalArgumentException(
-                    "Damage cannot be negative.");
-        }
-
-        if (!isAlive() || incomingDamage == 0) {
-            return 0;
-        }
-
-        int actualDamage = Math.max(1,
-                incomingDamage - defense);
-
-        hp = Math.max(0, hp - actualDamage);
-        return actualDamage;
-    }
+//    public int dodge(int move) LOOOOOOOOOOOOOOOOOOOOOK IN to THISSSSSSSSSSSSSSSSSSSSSS!!!!!!!!!!!!!!
 
     public static  final Random RANDOM = new Random();
 

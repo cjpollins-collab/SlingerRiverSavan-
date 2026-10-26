@@ -7,6 +7,9 @@ public abstract class Slinger extends GameCharacter {
     private int level;
     private int experience;
     private int experienceToNextLevel;
+    public abstract void printCombatMenu();
+    public abstract int getMaxCombatChoices();
+    public abstract void executeCombatAction(int choice, GameCharacter target, java.util.List<GameCharacter> allies);
 
     public Slinger(String name, int hp, int maxhp, int attack, int defense) {
         super(name, hp, maxhp, attack, defense);
@@ -15,19 +18,15 @@ public abstract class Slinger extends GameCharacter {
         experienceToNextLevel = 100;
     }
 
-    public int getLevel() {
-        return level;
+    /**
+     * Overrides the parent miss metric to use the specific Slinger archetype accuracy.
+     */
+    @Override
+    protected double getMissedShot() {
+        return getMissChance();
     }
 
-    /** @return current experience */
-    public int getExperience() {
-        return experience;
-    }
 
-    /** @return experience needed for the next level */
-    public int getExperienceToNextLevel() {
-        return experienceToNextLevel;
-    }
 
     /**
      * Adds experience and levels up when enough is earned.
@@ -67,5 +66,18 @@ public abstract class Slinger extends GameCharacter {
         return super.getStatus()
                 + " | Level: " + level
                 + " | XP: " + experience + "/" + experienceToNextLevel;
+    }
+    public int getLevel() {
+        return level;
+    }
+
+    /** @return current experience */
+    public int getExperience() {
+        return experience;
+    }
+
+    /** @return experience needed for the next level */
+    public int getExperienceToNextLevel() {
+        return experienceToNextLevel;
     }
 }

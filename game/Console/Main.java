@@ -1,5 +1,6 @@
 package Console;
 
+import Console.ConsoleUI;
 import characters.Gunner;
 import characters.Shotgun;
 import characters.TriggerHappy;
@@ -17,10 +18,10 @@ public class Main {
         GameEngine game = new GameEngine();
 
         // Create the player's party.
-        game.getParty().addMember(new Gunner("Thorin"));
-        game.getParty().addMember(new Shotgun("Elara"));
-        game.getParty().addMember(new TriggerHappy("Robin"));
-        game.getParty().addMember(new Sawbone("Luna"));
+        game.getParty().addMember(new Gunner("Lucky"));
+        game.getParty().addMember(new Shotgun("Shotty"));
+        game.getParty().addMember(new TriggerHappy("Goldy"));
+        game.getParty().addMember(new Sawbone("Sasha"));
 
         // Create the starting locations.
         game.getGameMap().addLocation(
@@ -47,8 +48,8 @@ public class Main {
         );
 
         Bounty firstQuest = new Bounty(
-                "Defeat the Goblin",
-                "Defeat the goblin threatening the forest.",
+                "Bring in the Bandit",
+                "Defeat the Bandits.",
                 1,
                 100,
                 50

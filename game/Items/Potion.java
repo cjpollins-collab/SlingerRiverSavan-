@@ -65,7 +65,7 @@ public class Potion extends Item {
         }
 
         if (target instanceof Sawbone) {
-            ((Sawbone) target).recoverMeds(restoreAmount);
+            ((Sawbone) target).recoverMeds();
             System.out.println(target.getName()
                     + " recovered meds!");
             return true;
