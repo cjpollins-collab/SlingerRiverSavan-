@@ -7,7 +7,7 @@ public class Sawbone extends Slinger{
         public static final int MAX_MEDS = 100;
 
         public Sawbone(String name) {
-            super(name, 75, 75, 10,35);
+            super(name, 75, 75, 15,35);
             meds = MAX_MEDS;
         }
 

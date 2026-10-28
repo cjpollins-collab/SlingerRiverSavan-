@@ -23,7 +23,7 @@ public class Gunner extends Slinger {
             // 2. Consume the ammo
             ammo -= 1;
 
-            if (doesShotMiss()) {
+            if (doesAttackMiss(target,0.00)) {
                 System.out.println(getName() + " missed the shot!");
                 return 0;
             }
@@ -45,7 +45,7 @@ public class Gunner extends Slinger {
         }
 
         ammo -= 2;
-        if (doesShotMiss()) {
+        if (doesAttackMiss(target,0.00)) {
             System.out.println(getName() + " missed their shots!");
             return 0;
         }

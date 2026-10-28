@@ -23,12 +23,12 @@ public class TriggerHappy extends Slinger{
         // 2. Consume the ammo
         ammo -= 1;
 
-        if (doesShotMiss()) {
+        if (doesAttackMiss(target,-0.10)) {
             System.out.println(getName() + " misses their shot!");
             return 0;
         }
 
-        int damage = target.takeDamage(getAttack() + 5)*2;
+        int damage = target.takeDamage(getAttack())*2;
 
         System.out.println(getName() + " unloads rounds on " + target.getName() + " for "
                 + damage + " damage!");;
@@ -57,7 +57,7 @@ public class TriggerHappy extends Slinger{
             shotsFired += 1;  // Increment our shot counter
 
             // Check if this specific shot misses
-            if (doesShotMiss()) {
+            if (doesAttackMiss(target,0.00)) {
                 System.out.println("  Shot #" + shotsFired + " misses!");
                 continue; // Move to the next bullet
             }

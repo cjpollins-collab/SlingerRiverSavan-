@@ -54,6 +54,7 @@ public abstract class Enemy extends GameCharacter {
                 return 0;
             }
 
+
             if (target.isDodging()) {
                 target.setDodging(false);
 

@@ -64,12 +64,36 @@ public abstract class GameCharacter {
     public static  final Random RANDOM = new Random();
 
     protected double getMissedShot() {
+        return getMissChance();
+    }
+
+    protected double getMissChance() {
         return 0.20;
     }
 
     protected boolean doesShotMiss() {
         return RANDOM.nextDouble() < getMissedShot();
     }
+
+
+    protected boolean doesAttackMiss(GameCharacter target, double abilityMissChance) {
+        if (target == null || !target.isAlive()) {
+            return true;
+        }
+
+        boolean wasDodging = target.isDodging();
+
+        double missChance = getMissChance() + abilityMissChance;
+
+        if (wasDodging) {
+            missChance += 0.15;
+            target.setDodging(false);
+        }
+        missChance = Math.max(0.0, Math.min(1.0, missChance));
+
+        return RANDOM.nextDouble() < missChance;
+    }
+
     public boolean isAlive() {
         return hp > 0;
     }

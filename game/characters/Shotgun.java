@@ -23,7 +23,7 @@ public class Shotgun extends Slinger{
     // 2. Consume the ammo
     shells -= 1;
 
-        if (doesShotMiss()) {
+        if (doesAttackMiss(target,0.00)) {
             System.out.println(getName() + " missed the shot!");
             return 0;
         }
@@ -46,7 +46,7 @@ public class Shotgun extends Slinger{
             // 2. Consume the ammo
             shells -= 2;
 
-            if (doesShotMiss()) {
+            if (doesAttackMiss(target,0.00)) {
                 System.out.println(getName() + " missed the shot!");
                 return 0;
             }
