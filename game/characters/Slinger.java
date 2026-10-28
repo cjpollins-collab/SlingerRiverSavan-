@@ -25,8 +25,20 @@ public abstract class Slinger extends GameCharacter {
     protected double getMissedShot() {
         return getMissChance();
     }
+    protected boolean dodging = false;
+    protected double dodgeMissBonus = 0.0;
 
+    public void dodge() {
+        if (!isAlive()) {
+            return;
+        }
 
+        dodging = true;
+        dodgeMissBonus = 0.15;
+
+        System.out.println(getName()
+                + " prepares to dodge! Enemy miss chance increased by 15%.");
+    }
 
     /**
      * Adds experience and levels up when enough is earned.
@@ -58,6 +70,17 @@ public abstract class Slinger extends GameCharacter {
     }
 
     protected abstract double getMissChance();
+
+    public String getAmmoStatus() {
+        return "Ammo: N/A";
+    }
+    public boolean isDodging() {
+        return dodging;
+    }
+
+    public void setDodging(boolean dodging) {
+        this.dodging = dodging;
+    }
 
     public abstract String getCombatRole();
 

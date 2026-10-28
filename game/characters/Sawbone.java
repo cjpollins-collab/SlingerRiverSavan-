@@ -11,7 +11,7 @@ public class Sawbone extends Slinger{
             meds = MAX_MEDS;
         }
 
-        public int getMana() {
+        public int getMeds() {
             return meds;
         }
 
@@ -81,6 +81,7 @@ public class Sawbone extends Slinger{
         System.out.println("2. Heal");
         System.out.println("3. Group Heal");
         System.out.println("4. Regain meds");
+        System.out.println("5. Dodge");
 
     }
 
@@ -104,6 +105,10 @@ public class Sawbone extends Slinger{
             case 4:
                 this.recoverMeds();
                 break;
+            case 5:
+                this.setDodging(true);
+                System.out.println(getName() + " prepares to dodge!");
+                break;
             default:
                 System.out.println("Invalid action selection.");
                 break;
@@ -117,6 +122,11 @@ public class Sawbone extends Slinger{
         @Override
         public String getCombatRole() {
             return "Healer";
+        }
+
+        @Override
+        public String getAmmoStatus() {
+            return "Medical supplies: " + meds;
         }
 
         @Override

@@ -4,7 +4,7 @@ public class BanditLeader extends Enemy{
     private static final String DEFAULT_NAME = "Bandit Leader";
     /** Creates a bandit with basic combat statistics. */
     public BanditLeader() {
-        super(DEFAULT_NAME,500,200,30,15,100,10);
+        super(DEFAULT_NAME,500,200,75,15,100,10);
     }
 
     @Override

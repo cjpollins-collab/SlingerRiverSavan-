@@ -26,7 +26,7 @@ public class Main {
         // Create the starting locations.
         game.getGameMap().addLocation(
                 new Location(
-                        "Eldoria Village",
+                        "Oasis Town",
                         "A peaceful village where adventurers prepare for their journeys.",
                         true
                 )
@@ -34,7 +34,7 @@ public class Main {
 
         game.getGameMap().addLocation(
                 new Location(
-                        "Blighted Forest",
+                        "Dusted Deserts",
                         "A dark forest filled with dangerous creatures.",
                         false
                 )
@@ -43,8 +43,8 @@ public class Main {
         // Create the first chapter and quest.
         Chapter firstChapter = new Chapter(
                 1,
-                "The Blighted Forest",
-                "A mysterious corruption threatens the kingdom of Eldoria."
+                "Dusted Deserts",
+                "The influence of the big boss is all around."
         );
 
         Bounty firstQuest = new Bounty(

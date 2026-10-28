@@ -24,17 +24,15 @@ public class TriggerHappy extends Slinger{
         ammo -= 1;
 
         if (doesShotMiss()) {
-            System.out.println(getName() + " misses their shots!");
+            System.out.println(getName() + " misses their shot!");
             return 0;
         }
 
-        int damage = target.takeDamage(getAttack() + 5);
-        int dealt = target.takeDamage(damage);
-
+        int damage = target.takeDamage(getAttack() + 5)*2;
 
         System.out.println(getName() + " unloads rounds on " + target.getName() + " for "
                 + damage + " damage!");;
-        return dealt;
+        return damage;
     }
 
     public int sprayAndPray(GameCharacter target) {
@@ -65,7 +63,7 @@ public class TriggerHappy extends Slinger{
             }
 
             // Calculate and apply damage for a successful hit
-            int baseDamage = getAttack() + 5;
+            int baseDamage = (getAttack() +5)*2;
             int damageDealtThisShot = target.takeDamage(baseDamage);
 
             totalDamageDealt += damageDealtThisShot;
@@ -84,21 +82,13 @@ public class TriggerHappy extends Slinger{
     }
 
     //
-////        /** Restores mana without exceeding the maximum. */
-//    @Override
-//    public void reload(int bullets) {
-//        if (bullets <= 0) {
-//            throw new IllegalArgumentException(
-//                    "You ran out of rounds.");
-//        }
-//
-//        ammo = Math.min(mag, ammo + bullets);
-//    }
+
 @Override
 public void printCombatMenu() {
     System.out.println("1. Shoot");
     System.out.println("2. Spray and Pray");
     System.out.println("3. Reload");
+    System.out.println("4. Dodge");
 }
 
     @Override
@@ -116,6 +106,10 @@ public void executeCombatAction(int choice, GameCharacter target, java.util.List
         case 3:
             this.reload();
             break;
+        case 5:
+            this.setDodging(true);
+            System.out.println(getName() + " prepares to dodge!");
+            break;
         default:
             System.out.println("Invalid action selection.");
             break;
@@ -130,6 +124,11 @@ public void executeCombatAction(int choice, GameCharacter target, java.util.List
         return "Trigger Happy: Happy to be shooting";
     }
     //
+    @Override
+    public String getAmmoStatus() {
+        return "Rounds: " + ammo + "/" + mag;
+    }
+
     @Override
     public String getStatus() {
         return super.getStatus()

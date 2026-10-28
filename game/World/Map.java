@@ -1,4 +1,5 @@
 package World;
+import World.Location;
 
 import java.util.ArrayList;
 import java.util.Collections;

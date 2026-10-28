@@ -10,6 +10,7 @@ public abstract class GameCharacter {
     int maxhp;
     int attack;
     int defense;
+    boolean dodging;
     private Equipment equipment = new Equipment();
     GameCharacter(String name, int hp, int maxhp, int attack, int defense) {
         this.name = name;
@@ -47,6 +48,8 @@ public abstract class GameCharacter {
             System.out.println(getName() + " missed the shot!");
             return 0;
         }
+
+
         int damage = target.takeDamage(getAttack());
 
         System.out.println(getName() + " attacks "
@@ -71,17 +74,27 @@ public abstract class GameCharacter {
         return hp > 0;
     }
     public int takeDamage(int incomingDamage) {
-        if (incomingDamage <= 0 || !isAlive()) {
+        if (incomingDamage < 0 || !isAlive()) {
+            return 0;
+        }
+        // Dodge avoids the next incoming attack.
+        if (getDefense() > incomingDamage) {
+            System.out.println(getName() + "'s defense blocked the attack!");
             return 0;
         }
 
-        int actualDamage = Math.max(
-                1, incomingDamage - getDefense()
-        );
-
+        int actualDamage = Math.max(0, incomingDamage - getDefense());
         hp = Math.max(0, hp - actualDamage);
 
         return actualDamage;
+    }
+
+    public boolean isDodging() {
+        return dodging;
+    }
+
+    public void setDodging(boolean dodging) {
+        this.dodging = dodging;
     }
     public String getStatus() {
         return name + " HP: " + hp + "/" + maxhp

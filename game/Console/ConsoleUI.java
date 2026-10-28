@@ -8,11 +8,14 @@ package Console;
 //import Engine.GameEngine;
 //import Engine.BattleSystem;
 //import Engine.Party;
+
 import Engine.CombatActionProvider;
 import Engine.GameEngine;
 import characters.*;
 import Engine.Party;
+import World.Location;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,6 +24,8 @@ public class ConsoleUI implements CombatActionProvider {
     private final GameEngine game;
     private final InputHandler input;
     private boolean running;
+
+
 
     public ConsoleUI(GameEngine game, Scanner scanner) {
         if (game == null || scanner == null) {
@@ -54,7 +59,7 @@ public class ConsoleUI implements CombatActionProvider {
                     break;
 
                 case 3:
-                    startGoblinBattle();
+                    showBountyList();
                     break;
 
                 case 4:
@@ -64,9 +69,6 @@ public class ConsoleUI implements CombatActionProvider {
                 case 5:
                     quitGame();
                     break;
-                case 6:
-                    startBossBattle();
-
                 default:
                     System.out.println("Invalid option.");
             }
@@ -76,10 +78,10 @@ public class ConsoleUI implements CombatActionProvider {
     private void displayWelcome() {
         System.out.println();
         System.out.println("==================================");
-        System.out.println("       SHADOWS OF ELDORIA");
+        System.out.println("       SLINGER RIVER SAVAN");
         System.out.println("==================================");
         System.out.println(
-                "Darkness threatens the kingdom."
+                "Corruption plagues this land."
         );
         System.out.println(
                 "Gather your party and begin your journey!"
@@ -91,13 +93,13 @@ public class ConsoleUI implements CombatActionProvider {
         System.out.println("========== MAIN MENU ==========");
         System.out.println("1. View Party Status");
         System.out.println("2. Travel to a Location");
-        System.out.println("3. Fight a Bandit");
+        System.out.println("3. View Bounty List");
         System.out.println("4. View the World Map");
         System.out.println("5. Quit Game");
         System.out.println("===============================");
     }
 
-    private void showStatus() {
+    public void showStatus() {
         System.out.println("\n========== PARTY STATUS ==========");
         game.getParty().displayParty();
     }
@@ -105,7 +107,7 @@ public class ConsoleUI implements CombatActionProvider {
     private void travel() {
         System.out.println("\n========== TRAVEL ==========");
         System.out.println("Enter a location name.");
-        System.out.println("Examples: Eldoria Village, Blighted Forest");
+        System.out.println("Examples: Oasis Town, Dusted Deserts");
 
         String locationName = input.readLine("Destination: ");
 
@@ -117,6 +119,7 @@ public class ConsoleUI implements CombatActionProvider {
             System.out.println("That location could not be found.");
         }
     }
+
 
     private void startBossBattle() {
         System.out.println("\nA bandit approaches your party!");
@@ -133,7 +136,7 @@ public class ConsoleUI implements CombatActionProvider {
             );
         }
     }
-    private void startGoblinBattle() {
+    private void startBanditBattle() {
         System.out.println("\nA bandit approaches your party!");
 
         boolean victory = game.startBattle(new Bandit(), this);
@@ -146,6 +149,80 @@ public class ConsoleUI implements CombatActionProvider {
             System.out.println(
                     "Your party was unable to defeat the bandit."
             );
+        }
+    }
+
+
+    private void startGroupBanditBattle() {
+        System.out.println("\nSeveral bandits surround your party!");
+
+        List<Enemy> enemies = new ArrayList<>();
+        enemies.add(new Bandit());
+        enemies.add(new Bandit());
+        enemies.add(new BanditLeader());
+
+        boolean victory = game.startBattle(enemies, this);
+
+        if (victory) {
+            System.out.println(
+                    "Your party survived the bandit ambush.");
+        } else {
+            System.out.println(
+                    "Your party was unable to survive the ambush.");
+        }
+    }
+
+
+    private void showBountyList() {
+        Location location = game.getCurrentLocation();
+
+        System.out.println("\n========== BOUNTY BOARD ==========");
+
+        if (location == null) {
+            System.out.println("No location is currently available.");
+            return;
+        }
+
+        System.out.println("Location: " + location.getName());
+
+        if (location.isSafeZone()) {
+            System.out.println("This is a safe zone. No bounties available.");
+            return;
+        }
+
+        if (location.getName().equalsIgnoreCase("Dusted Deserts")) {
+            System.out.println("1. Forest Bandit - 50 coins");
+            System.out.println("2. Corrupted Outlaw - 100 coins");
+            System.out.println("3. Bandit Ambush - Group Battle");
+            System.out.println("4. Return to Main Menu");
+
+            int choice = input.readInt("Choose a bounty: ", 1, 4);
+
+            switch (choice) {
+                case 1:
+                    startBanditBattle();
+                    break;
+                case 2:
+                    startBossBattle();
+                    break;
+                case 3:
+                    startGroupBanditBattle();
+                case 4:
+                    return;
+            }
+
+        } else if (location.getName().equalsIgnoreCase("Dusty Trail")) {
+            System.out.println("1. Road Bandit - 50 coins");
+            System.out.println("2. Return to Main Menu");
+
+            int choice = input.readInt("Choose a bounty: ", 1, 2);
+
+            if (choice == 1) {
+                startBanditBattle();
+            }
+
+        } else {
+            System.out.println("No bounties are available here yet.");
         }
     }
 
@@ -162,7 +239,7 @@ public class ConsoleUI implements CombatActionProvider {
         if (confirm) {
             running = false;
             System.out.println(
-                    "Thank you for playing Shadows of Eldoria!"
+                    "Thank you for playing Slinger River Savan!"
             );
         } else {
             System.out.println("Returning to the main menu.");
@@ -171,8 +248,7 @@ public class ConsoleUI implements CombatActionProvider {
 
     // Display actions available to the current character.
     @Override
-    public int chooseAction(
-            GameCharacter slinger, Enemy enemy) {
+    public int chooseAction(GameCharacter slinger, Enemy enemy) {
 
         System.out.println(
                 "\n--- " + slinger.getName() + "'s Turn ---"
@@ -182,11 +258,13 @@ public class ConsoleUI implements CombatActionProvider {
                 "HP: " + slinger.getHp()
                         + "/" + slinger.getMaxhp()
         );
+        if (slinger instanceof Slinger) {
+            System.out.println(
+                    ((Slinger) slinger).getAmmoStatus()
+            );
+        }
 
-        System.out.println(
-                "Enemy: " + enemy.getName()
-                        + " (" + enemy.getHp() + " HP)"
-        );
+        System.out.println("\n========== COMBAT ACTIONS ==========");
 
         System.out.println("1. Shoot");
 
@@ -204,15 +282,11 @@ public class ConsoleUI implements CombatActionProvider {
             System.out.println("3. Group Heal");
             System.out.println("4. Regain meds");
         }
-        int maxChoice = 1;
-        if (slinger instanceof Gunner || slinger instanceof Shotgun ||
-                slinger instanceof TriggerHappy || slinger instanceof Sawbone) {
-            maxChoice = 4;
-        } else {
-            maxChoice = 1; // Or 2, if a default Slinger has a second option
-        }
 
-        return input.readInt("Choose an action: ", 1, maxChoice);
+        System.out.println("5. Dodge");
+        System.out.println("6. View Party Status");
+
+        return input.readInt("Choose an action: ", 1, 8);
     }
 
     // Let the player select a living party member to heal.
@@ -245,5 +319,22 @@ public class ConsoleUI implements CombatActionProvider {
         );
 
         return livingMembers.get(choice - 1);
+    }
+
+    @Override
+    public Enemy chooseEnemy(List<Enemy> enemies) {
+        System.out.println("\n========== ENEMY PARTY ==========");
+
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy enemy = enemies.get(i);
+
+            System.out.println((i + 1) + ". " + enemies.get(i).getName()+ " - HP: " + enemy.getHp()
+                    + "/" + enemy.getMaxhp());
+        }
+
+        int choice = input.readInt(
+                "Choose an enemy to target: ", 1, enemies.size());
+
+        return enemies.get(choice - 1);
     }
 }

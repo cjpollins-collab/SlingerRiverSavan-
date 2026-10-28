@@ -77,6 +77,7 @@ public void printCombatMenu() {
     System.out.println("1. Shoot");
     System.out.println("2. Rapid Fire");
     System.out.println("3. Reload");
+    System.out.println("4. Dodge");
 }
 
     @Override
@@ -96,6 +97,10 @@ public void printCombatMenu() {
             case 3:
                 this.reload();
                 break;
+            case 5:
+                this.setDodging(true);
+                System.out.println(getName() + " prepares to dodge!");
+                break;
             default:
                 System.out.println("Invalid action selection.");
                 break;
@@ -110,6 +115,11 @@ public void printCombatMenu() {
             return "Shotgun: Close and personal damage";
         }
         //
+        @Override
+        public String getAmmoStatus() {
+            return "Shells: " + shells + "/" + shotgun;
+        }
+
         @Override
         public String getStatus() {
             return super.getStatus()

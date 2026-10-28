@@ -29,8 +29,7 @@ public abstract class Enemy extends GameCharacter {
         this.experienceReward = experienceReward;
         this.goldReward = goldReward;
     }
-
-    /** @return experience awarded for defeating this enemy */
+        /** @return experience awarded for defeating this enemy */
     public int getExperienceReward() {
         return experienceReward;
     }
@@ -48,4 +47,30 @@ public abstract class Enemy extends GameCharacter {
      * @return enemy behavior description
      */
     public abstract String getBehaviorDescription();
+
+
+        public int attackTarget(GameCharacter target) {
+            if (target == null || !isAlive() || !target.isAlive()) {
+                return 0;
+            }
+
+            if (target.isDodging()) {
+                target.setDodging(false);
+
+                // Dodge succeeds 15% of the time.
+                if (Math.random() < 0.15) {
+                    System.out.println(target.getName() + " dodged the attack!");
+                    return 0;
+                } else {
+                    System.out.println(target.getName() + " failed to dodge");
+                }
+            }
+
+            int damage = target.takeDamage(getAttack());
+
+            System.out.println(getName() + " attacks "
+                    + target.getName() + " for " + damage + " damage!");
+
+            return damage;
+        }
 }

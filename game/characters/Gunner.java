@@ -1,4 +1,5 @@
 package characters;
+import Console.ConsoleUI;
 
 public class Gunner extends Slinger {
     private int ammo;
@@ -75,6 +76,7 @@ public class Gunner extends Slinger {
         System.out.println("1. Shoot");
         System.out.println("2. Rapid Fire");
         System.out.println("3. Reload");
+        System.out.println("4. Dodge");
     }
 
     @Override
@@ -94,17 +96,28 @@ public class Gunner extends Slinger {
             case 3:
                 this.reload();
                 break;
+            case 5:
+                this.setDodging(true);
+                System.out.println(getName() + " prepares to dodge!");
+                break;
             default:
                 System.out.println("Invalid action selection.");
                 break;
         }
     }
-        @Override
+
+
+    @Override
         public String getCombatRole() {
 
-        return "Gunner: shoot out a good amount of damage";
+            return "Gunner: shoot out a good amount of damage";
         }
-//
+
+        @Override
+        public String getAmmoStatus() {
+            return "Ammo: " + ammo + "/" + mag;
+        }
+
         @Override
         public String getStatus() {
             return super.getStatus()

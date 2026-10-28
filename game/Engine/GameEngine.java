@@ -1,8 +1,9 @@
 package Engine;
 
-import characters.Enemy;
+import characters.*;
 import World.Chapter;
 import World.Map;
+import World.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,10 @@ public class GameEngine {
         return gameMap;
     }
 
+    public Location getCurrentLocation() {
+        return gameMap.getCurrentLocation();
+    }
+
     public Chapter getCurrentChapter() {
         if (currentChapterIndex < 0
                 || currentChapterIndex >= chapters.size()) {
@@ -47,29 +52,20 @@ public class GameEngine {
         }
     }
 
-    // Non-interactive version retained for compatibility.
-    public boolean startBattle(Enemy enemy) {
-        System.out.println(
-                "Start this battle through the console menu."
-        );
-        return false;
-    }
-
     // Interactive version: asks the player to choose each action.
+
     public boolean startBattle(
             Enemy enemy,
             CombatActionProvider actions) {
-
-        boolean victory = battleSystem.startBattle(
-                party, enemy, actions
-        );
-
-        if (victory) {
-            System.out.println("Battle completed successfully!");
-        }
-
-        return victory;
+        return battleSystem.startBattle(party, enemy, actions);
     }
+
+    public boolean startBattle(
+            List<Enemy> enemies,
+            CombatActionProvider actions) {
+        return battleSystem.startBattle(party, enemies, actions);
+    }
+
 
     public boolean travelTo(String locationName) {
         return gameMap.travelTo(locationName);
@@ -104,7 +100,7 @@ public class GameEngine {
     }
 
     public void displayGameStatus() {
-        System.out.println("\n=== SHADOWS OF ELDORIA ===");
+        System.out.println("\n=== SLINGER RIVER SAVAN ===");
 
         Chapter current = getCurrentChapter();
 
