@@ -15,6 +15,15 @@ public class Party {
         gold = 100;
     }
 
+    public boolean hasMember(String name) {
+        for (GameCharacter member : members) {
+            if (member.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean addMember(GameCharacter character) {
         if (character == null || members.contains(character)) {
             return false;

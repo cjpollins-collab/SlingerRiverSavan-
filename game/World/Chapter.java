@@ -1,4 +1,6 @@
 package World;
+import Engine.Party;
+import characters.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,6 +88,10 @@ public class Chapter {
             }
         }
 
+//        if (chapter.completeChapter()) {
+//            chapter.recruitRook(party);
+//        }
+
         completed = true;
         System.out.println("Chapter completed: " + title);
         return true;
@@ -99,5 +105,16 @@ public class Chapter {
                 + (completed ? "Completed"
                 : unlocked ? "Unlocked" : "Locked"));
         System.out.println("Quests: " + bountyList.size());
+    }
+
+    public void recruitRook(Party party) {
+        if (party == null) {
+            return;
+        }
+
+        if (completed && !party.hasMember("Rook")) {
+            party.addMember(new Gunner("Rook"));
+            System.out.println("Rook has joined your journey!");
+        }
     }
 }

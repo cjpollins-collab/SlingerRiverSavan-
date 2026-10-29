@@ -5,7 +5,7 @@ package Console;
 //import characters.Sawbone;
 //import characters.Enemy;
 ////import characters.Bandit;
-//import Engine.GameEngine;
+import Engine.GameEngine;
 //import Engine.BattleSystem;
 //import Engine.Party;
 
@@ -40,14 +40,15 @@ public class ConsoleUI implements CombatActionProvider {
     }
 
     public void start() {
+        game.displayGameStatus();
         displayWelcome();
 
         while (running) {
             displayMenu();
 
+
             int choice = input.readInt(
-                    "Choose an option: ", 1, 6
-            );
+                    "Choose an option: ", 1, 6);
 
             switch (choice) {
                 case 1:
@@ -68,6 +69,8 @@ public class ConsoleUI implements CombatActionProvider {
 
                 case 5:
                     quitGame();
+                    break;
+                case 6:
                     break;
                 default:
                     System.out.println("Invalid option.");
@@ -142,13 +145,11 @@ public class ConsoleUI implements CombatActionProvider {
         boolean victory = game.startBattle(new Bandit(), this);
 
         if (victory) {
-            System.out.println(
-                    "Your party survived the encounter."
-            );
+            System.out.println("Your party survived the encounter.");
+            game.addBountyProgress("Bring in the Bandit",1);
         } else {
             System.out.println(
-                    "Your party was unable to defeat the bandit."
-            );
+                    "Your party was unable to defeat the bandit.");
         }
     }
 
@@ -191,12 +192,15 @@ public class ConsoleUI implements CombatActionProvider {
         }
 
         if (location.getName().equalsIgnoreCase("Dusted Deserts")) {
+
             System.out.println("1. Forest Bandit - 50 coins");
             System.out.println("2. Corrupted Outlaw - 100 coins");
             System.out.println("3. Bandit Ambush - Group Battle");
-            System.out.println("4. Return to Main Menu");
+            System.out.print("4. Rescue Daji - ");
+            game.displayBountyProgress("Rescue Daji");
+            System.out.println("5. Return to Main Menu");
 
-            int choice = input.readInt("Choose a bounty: ", 1, 4);
+            int choice = input.readInt("Choose a bounty: ", 1, 5);
 
             switch (choice) {
                 case 1:
@@ -207,9 +211,14 @@ public class ConsoleUI implements CombatActionProvider {
                     break;
                 case 3:
                     startGroupBanditBattle();
+                    break;
                 case 4:
+                    rescueDaji();
+                    break;
+                case 5:
                     return;
             }
+
 
         } else if (location.getName().equalsIgnoreCase("Dusty Trail")) {
             System.out.println("1. Road Bandit - 50 coins");
@@ -225,6 +234,36 @@ public class ConsoleUI implements CombatActionProvider {
             System.out.println("No bounties are available here yet.");
         }
     }
+
+
+
+    private void rescueDaji() {
+        Location location = game.getCurrentLocation();
+
+        System.out.println("\n========== RESCUE DAJI ==========");
+
+        if (location == null
+                || !location.getName().equalsIgnoreCase("Dusted Deserts")) {
+            System.out.println(
+                    "You must travel to Dusted Deserts to find Daji."
+            );
+            return;
+        }
+
+        System.out.println("You found Daji held captive by the outlaws.");
+
+        boolean rescueSuccessful = input.readYesNo(
+                "Rescue Daji? (y/n): "
+        );
+
+        if (rescueSuccessful) {
+            game.addBountyProgress("Rescue Daji", 1);
+        } else {
+            System.out.println("They got away but your closer to their trail.");
+        }
+    }
+
+
 
     private void showMap() {
         System.out.println("\n========== WORLD MAP ==========");

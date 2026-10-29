@@ -3,6 +3,7 @@ package Engine;
 import characters.*;
 import World.Chapter;
 import World.Map;
+import World.Bounty;
 import World.Location;
 
 import java.util.ArrayList;
@@ -71,6 +72,14 @@ public class GameEngine {
         return gameMap.travelTo(locationName);
     }
 
+    private void recruitCompanion(GameCharacter character) {
+        if (character != null
+                && !party.hasMember(character.getName())) {
+            party.addMember(character);
+        }
+    }
+
+
     public boolean completeCurrentChapter() {
         Chapter current = getCurrentChapter();
 
@@ -83,6 +92,27 @@ public class GameEngine {
                     "Complete all chapter quests before proceeding."
             );
             return false;
+        }
+
+
+        // Recruit companions based on the completed chapter.
+        switch (current.getChapterNumber()) {
+            case 1:
+                recruitCompanion(new Gunner("Rook"));
+                break;
+
+            case 2:
+                // Replace Medic with your actual support character class.
+                // recruitCompanion(new Medic("Mara"));
+                break;
+
+            case 3:
+                // Add another companion when you create their class.
+                // recruitCompanion(new SomeCharacter("Name"));
+                break;
+
+            default:
+                break;
         }
 
         if (currentChapterIndex + 1 < chapters.size()) {
@@ -99,6 +129,42 @@ public class GameEngine {
         return true;
     }
 
+    public boolean addBountyProgress(String bountyName, int amount) {
+        if (bountyName == null || amount <= 0) {
+            return false;
+        }
+
+        // Search every chapter, not just the current chapter.
+        for (Chapter chapter : chapters) {
+            for (Bounty bounty : chapter.getBounty()) {
+
+                if (bounty.getName().equalsIgnoreCase(bountyName)) {
+                    boolean wasCompleted = bounty.isCompleted();
+
+                    bounty.addProgress(amount);
+
+                    // Trigger recruitment only when the bounty first completes.
+                    if (!wasCompleted && bounty.isCompleted()) {
+                        if (bounty.getName().equalsIgnoreCase("Rescue Daji")) {
+                            System.out.println("You rescued Daji!");
+                            recruitCompanion(new Daji("Daji"));
+                        }
+
+                        System.out.println(
+                                "Bounty completed: " + bounty.getName()
+                        );
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        System.out.println("Bounty not found: " + bountyName);
+        return false;
+    }
+
+
     public void displayGameStatus() {
         System.out.println("\n=== SLINGER RIVER SAVAN ===");
 
@@ -113,4 +179,23 @@ public class GameEngine {
         party.displayParty();
         gameMap.displayMap();
     }
+
+
+    public void displayBountyProgress(String bountyName) {
+        for (Chapter chapter : chapters) {
+            for (Bounty bounty : chapter.getBounty()) {
+                if (bounty.getName().equalsIgnoreCase(bountyName)) {
+                    System.out.println(
+                            bounty.getName() + ": "
+                                    + bounty.getCurrentProgress() + "/"
+                                    + bounty.getRequiredProgress()
+                    );
+                    return;
+                }
+            }
+        }
+
+        System.out.println("Bounty not found: " + bountyName);
+    }
+
 }

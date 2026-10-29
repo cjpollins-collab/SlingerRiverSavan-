@@ -55,6 +55,17 @@ public class Main {
                 50
         );
 
+        Bounty rescueDaji = new Bounty(
+                "Rescue Daji",
+                "Find Daji and rescue him from the outlaws.",
+                3,
+                100,
+                50
+        );
+
+        firstChapter.addBounty(rescueDaji);
+        game.addBountyProgress("Rescue Daji", 1);
+
         firstChapter.addBounty(firstQuest);
         game.addChapter(firstChapter);
 
