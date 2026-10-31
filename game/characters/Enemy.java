@@ -6,6 +6,8 @@ package characters;
 public abstract class Enemy extends GameCharacter {
     private int experienceReward;
     private int goldReward;
+    private int burnDamage;
+    private int burnTurnsRemaining;
 
     /**
      * Creates an enemy with combat statistics and rewards.
@@ -74,4 +76,39 @@ public abstract class Enemy extends GameCharacter {
 
             return damage;
         }
+    // Applies burning to the enemy.
+    public void applyBurn(int damage, int duration) {
+        if (!isAlive() || damage <= 0 || duration <= 0) {
+            return;
+        }
+
+        burnDamage = damage;
+        burnTurnsRemaining = duration;
+
+        System.out.println(getName() + " has been set on fire!");
+    }
+
+    // Processes burning at the beginning of the enemy's turn.
+    public void processBurn() {
+        if (!isAlive() || burnTurnsRemaining <= 0) {
+            return;
+        }
+
+        int damage = takeDamageIgnoringDefense(burnDamage);
+
+        burnTurnsRemaining--;
+
+        System.out.println(getName() + " takes " + damage
+                + " burn damage!");
+
+        if (!isAlive()) {
+            System.out.println(getName() + " was defeated by burning!");
+        } else if (burnTurnsRemaining == 0) {
+            System.out.println(getName() + " is no longer burning.");
+        }
+    }
+
+    public boolean isBurning() {
+        return burnTurnsRemaining > 0;
+    }
 }

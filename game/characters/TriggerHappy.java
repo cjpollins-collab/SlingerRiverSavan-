@@ -1,10 +1,12 @@
 package characters;
 
+import Items.WeaponEffect;
+
 public class TriggerHappy extends Slinger{
     private int ammo;
     private int mag;/*not clips*/
     public TriggerHappy(String name) {
-        super(name, 150, 150, 10, 40);
+        super(name, 150, 150, 5, 40);
 
         mag = 30;
         ammo = mag;
@@ -29,6 +31,8 @@ public class TriggerHappy extends Slinger{
         }
 
         int damage = target.takeDamage(getAttack())*2;
+
+        applyWeaponEffects(target);
 
         System.out.println(getName() + " unloads rounds on " + target.getName() + " for "
                 + damage + " damage!");;
@@ -63,8 +67,15 @@ public class TriggerHappy extends Slinger{
             }
 
             // Calculate and apply damage for a successful hit
-            int baseDamage = (getAttack() +5)*2;
-            int damageDealtThisShot = target.takeDamage(baseDamage);
+            int baseDamage = calculateAbilityDamage((getAttack() + 5) * 2);
+            int damageDealtThisShot =
+                    dealWeaponDamageWithoutCritical(target, baseDamage);
+
+            if (!target.isAlive()
+                    && hasWeaponEffect(WeaponEffect.RESTORE_AMMO_ON_KILL)) {
+                ammo = Math.min(mag, ammo + 5);
+                System.out.println(getName() + " restored 5 ammo!");
+            }
 
             totalDamageDealt += damageDealtThisShot;
 

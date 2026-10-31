@@ -1,7 +1,7 @@
 package Items;
 
 import characters.GameCharacter;
-import characters.Gunner;
+import characters.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,6 +66,11 @@ public class Inventory {
     }
 
     public boolean usePotion(int index, GameCharacter target) {
+        if (target == null) {
+            System.out.println("Invalid potion target.");
+            return false;
+        }
+
         if (index < 0 || index >= items.size()) {
             System.out.println("Invalid inventory selection.");
             return false;

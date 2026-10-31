@@ -1,0 +1,11 @@
+package Items;
+
+public enum WeaponEffect {
+    NONE,
+    DOUBLE_ABILITY_DAMAGE,
+    INCREASE_CRITICAL_CHANCE,
+    RESTORE_AMMO_ON_KILL,
+    INCREASE_HEALING,
+    IGNORE_DEFENSE,
+    BURN_ENEMY
+}

@@ -5,6 +5,7 @@ import World.Chapter;
 import World.Map;
 import World.Bounty;
 import World.Location;
+import World.Shop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ public class GameEngine {
     private final Map gameMap;
     private final BattleSystem battleSystem;
     private final List<Chapter> chapters;
+    private Shop shop;
+
 
     private int currentChapterIndex;
 
@@ -24,14 +27,21 @@ public class GameEngine {
         battleSystem = new BattleSystem();
         chapters = new ArrayList<>();
         currentChapterIndex = 0;
+        shop = new Shop("Oasis Town General Store");
     }
 
     public Party getParty() {
+
         return party;
     }
 
     public Map getGameMap() {
+
         return gameMap;
+    }
+    public Shop getShop() {
+
+        return shop;
     }
 
     public Location getCurrentLocation() {
@@ -55,16 +65,53 @@ public class GameEngine {
 
     // Interactive version: asks the player to choose each action.
 
+    // Interactive battle against one enemy.
     public boolean startBattle(
             Enemy enemy,
             CombatActionProvider actions) {
-        return battleSystem.startBattle(party, enemy, actions);
+
+        if (enemy == null) {
+            System.out.println("Cannot start this battle.");
+            return false;
+        }
+
+        List<Enemy> enemies = new ArrayList<>();
+        enemies.add(enemy);
+
+        return startBattle(enemies, actions);
     }
 
+    // Interactive battle against multiple enemies.
     public boolean startBattle(
             List<Enemy> enemies,
             CombatActionProvider actions) {
-        return battleSystem.startBattle(party, enemies, actions);
+
+        if (enemies == null) {
+            System.out.println("Cannot start this battle.");
+            return false;
+        }
+
+
+        // Remember which enemies were alive when battle started.
+        List<Enemy> enemiesAliveAtStart = new ArrayList<>();
+
+        for (Enemy enemy : enemies) {
+            if (enemy != null && enemy.isAlive()) {
+                enemiesAliveAtStart.add(enemy);
+            }
+        }
+
+        boolean victory = battleSystem.startBattle(
+                party, enemies, actions);
+
+        // Give Rescue Daji progress for each defeated bandit.
+        for (Enemy enemy : enemiesAliveAtStart) {
+            if (enemy instanceof Bandit && !enemy.isAlive()) {
+                addBountyProgress("Rescue Daji", 1);
+            }
+        }
+
+        return victory;
     }
 
 
@@ -166,8 +213,6 @@ public class GameEngine {
 
 
     public void displayGameStatus() {
-        System.out.println("\n=== SLINGER RIVER SAVAN ===");
-
         Chapter current = getCurrentChapter();
 
         if (current != null) {

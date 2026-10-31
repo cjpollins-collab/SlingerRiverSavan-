@@ -1,5 +1,7 @@
 package characters;
 
+import Items.WeaponEffect;
+
 public class Shotgun extends Slinger{
         private int shells;
         private int shotgun;/*not clips*/
@@ -28,8 +30,16 @@ public class Shotgun extends Slinger{
             return 0;
         }
 
-        int damage = target.takeDamage(getAttack() + 25);
-        int dealt = damage;
+    int damage = getAttack() + 25;
+    int dealt = dealWeaponDamage(target, damage);
+
+    applyWeaponEffects(target);
+
+    if (!target.isAlive()
+            && hasWeaponEffect(WeaponEffect.RESTORE_AMMO_ON_KILL)) {
+        shells = Math.min(shotgun, shells + 1);
+        System.out.println(getName() + " restored 1 shell!");
+    }
         System.out.println(getName() + " pumps "+ target.getName() + " for "
                 + damage + " damage!");;
         return dealt;
@@ -51,8 +61,16 @@ public class Shotgun extends Slinger{
                 return 0;
             }
 
-            int damage = target.takeDamage((getAttack() * 2)+5);
-            int dealt = damage;
+            int damage = calculateAbilityDamage((getAttack() * 2) + 5);
+            int dealt = dealWeaponDamageWithoutCritical(target, damage);
+
+            applyWeaponEffects(target);
+
+            if (!target.isAlive()
+                    && hasWeaponEffect(WeaponEffect.RESTORE_AMMO_ON_KILL)) {
+                shells = Math.min(shotgun, shells + 1);
+                System.out.println(getName() + " restored 1 shell!");
+            }
             System.out.println(getName() + " pumps "+ target.getName() + " for "
                     + damage + " damage!");;
             return dealt;
@@ -62,16 +80,6 @@ public class Shotgun extends Slinger{
         this.shells = this.shotgun;
         System.out.println(getName() + " reloaded! Ammo is back to " + shotgun + "/" + shotgun);
     }
-//    @Override
-//    public void reload(int bullets) {
-//        if (bullets <= 0) {
-//            throw new IllegalArgumentException(
-//                    "You ran out of shells.");
-//        }
-//
-//        shells = Math.min(shotgun, shells + bullets);
-//    }
-        //
 @Override
 public void printCombatMenu() {
     System.out.println("1. Shoot");

@@ -1,6 +1,7 @@
 
 package Engine;
 
+import Console.ConsoleUI;
 import characters.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,9 +86,44 @@ public class BattleSystem {
 
                     if (action == 6) {
                         System.out.println(
-                                "\n========== PARTY STATUS ==========");
+                                "\n========== PARTY STATUS =========="
+                        );
+
                         party.displayParty();
+
+                        int statusChoice = actions.chooseStatusOption();
+
+                        if (statusChoice == 1) {
+                            party.getInventory().displayInventory();
+                        }
+
                         continue;
+                    }
+
+                    else if (action == 7) {
+
+                        int itemIndex = actions.chooseInventoryItem(
+                                party.getInventory()
+                        );
+
+                        if (itemIndex == -1) {
+                            continue;
+                        }
+
+                        GameCharacter itemTarget = actions.chooseItemTarget(party);
+
+                        if (itemTarget == null) {
+                            continue;
+                        }
+
+                        boolean used = party.getInventory().usePotion(
+                                itemIndex,
+                                itemTarget
+                        );
+
+                        if (!used) {
+                            continue;
+                        }
                     }
 
                     boolean needsEnemy =
@@ -191,6 +227,16 @@ public class BattleSystem {
 
                 if (!enemy.isAlive()
                         || !party.hasLivingMembers()) {
+                    continue;
+                }
+
+// Process burning before the enemy attacks.
+                if (enemy.isBurning()) {
+                    enemy.processBurn();
+                }
+
+// Burning might defeat the enemy.
+                if (!enemy.isAlive()) {
                     continue;
                 }
 

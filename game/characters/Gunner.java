@@ -1,5 +1,6 @@
 package characters;
 import Console.ConsoleUI;
+import Items.WeaponEffect;
 
 public class Gunner extends Slinger {
     private int ammo;
@@ -10,6 +11,9 @@ public class Gunner extends Slinger {
         mag = 12;
         ammo = mag;
     }
+
+
+
         @Override
         public int shootingGun(GameCharacter target) {
             if (target == null || !isAlive() || !target.isAlive()) {
@@ -28,7 +32,16 @@ public class Gunner extends Slinger {
                 return 0;
             }
 
-            int damageDealt = target.takeDamage(getAttack() + 20);
+            int damage = getAttack() + 20;
+            int damageDealt = dealWeaponDamage(target, damage);
+
+            applyWeaponEffects(target);
+
+            if (!target.isAlive()
+                    && hasWeaponEffect(WeaponEffect.RESTORE_AMMO_ON_KILL)) {
+                ammo = Math.min(mag, ammo + 2);
+                System.out.println(getName() + " restored 2 ammo!");
+            }
             System.out.println(getName() + " shoots " + target.getName() + " for "
                     + damageDealt + " damage!");;
             return damageDealt;
@@ -52,7 +65,16 @@ public class Gunner extends Slinger {
 
 
 
-        int damageDealt = target.takeDamage(getAttack() + 45);
+        int damage = calculateAbilityDamage(getAttack() + 45);
+        int damageDealt = dealWeaponDamageWithoutCritical(target, damage);
+
+        applyWeaponEffects(target);
+
+        if (!target.isAlive()
+                && hasWeaponEffect(WeaponEffect.RESTORE_AMMO_ON_KILL)) {
+            ammo = Math.min(mag, ammo + 2);
+            System.out.println(getName() + " restored 2 ammo!");
+        }
 
         System.out.println(getName() + " two shots " + target.getName() + " for "
                 + damageDealt + " damage!");;

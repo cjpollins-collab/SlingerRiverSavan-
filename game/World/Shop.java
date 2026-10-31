@@ -2,6 +2,8 @@ package World;
 
 import Items.Inventory;
 import Items.Item;
+import Items.Potion;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +42,8 @@ public class Shop {
                 || playerGold.length == 0 || playerGold[0] < 0) {
             return false;
         }
+
+
 
         if (stockIndex < 0 || stockIndex >= stock.size()) {
             System.out.println("Invalid shop selection.");

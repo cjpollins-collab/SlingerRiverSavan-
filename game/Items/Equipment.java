@@ -37,6 +37,11 @@ public class Equipment {
             return false;
         }
 
+        if (equippedArmor != null) {
+            System.out.println("Replacing "
+                    + equippedArmor.getName() + ".");
+        }
+
         equippedArmor = armor;
 
         System.out.println("Equipped armor: "
@@ -44,7 +49,6 @@ public class Equipment {
 
         return true;
     }
-
     public Weapon unequipWeapon() {
         Weapon previousWeapon = equippedWeapon;
         equippedWeapon = null;

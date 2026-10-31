@@ -25,16 +25,12 @@ public abstract class Slinger extends GameCharacter {
     protected double getMissedShot() {
         return getMissChance();
     }
-    protected boolean dodging = false;
-    protected double dodgeMissBonus = 0.0;
-
     public void dodge() {
         if (!isAlive()) {
             return;
         }
 
-        dodging = true;
-        dodgeMissBonus = 0.15;
+        setDodging(true);
 
         System.out.println(getName()
                 + " prepares to dodge! Enemy miss chance increased by 15%.");

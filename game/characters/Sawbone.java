@@ -1,6 +1,7 @@
 package characters;
 
 import Engine.Party;
+import Items.WeaponEffect;
 
 public class Sawbone extends Slinger{
         private int meds;
@@ -25,6 +26,10 @@ public class Sawbone extends Slinger{
             } else {
                 meds -= 20;
                 int healingAmount = 35;
+                if (hasWeaponEffect(WeaponEffect.INCREASE_HEALING)) {
+                    healingAmount = (int) (healingAmount * 1.5);
+                }
+
                 int oldHealth = target.getHp();
                 target.heal(healingAmount);
                 int actualHealing = target.getHp() - oldHealth;
@@ -58,7 +63,13 @@ public class Sawbone extends Slinger{
         for (GameCharacter member : partyAllies) {
             if (member != null && member.isAlive()) {
                 int oldHealth = member.getHp();
-                member.heal(20);
+                int healingAmount = 20;
+
+                if (hasWeaponEffect(WeaponEffect.INCREASE_HEALING)) {
+                    healingAmount = (int) (healingAmount * 1.5);
+                }
+
+                member.heal(healingAmount);
                 totalHealing += member.getHp() - oldHealth;
             }
         }
